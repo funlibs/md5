@@ -260,6 +260,7 @@ void MD5Transform(buf, in)
 
 /* lh3: the following code is added by me */
 
+/*
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -294,3 +295,4 @@ int main(int argc, char *argv[])
     else for (i = 1; i < argc; ++i) md5_one(argv[i]);
     return 0;
 }
+*/

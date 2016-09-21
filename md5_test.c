@@ -21,20 +21,27 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <md5.h>
+
+#define HEX_STR "0123456789abcdef"
 
 #define FILE_0_MD5 "d41d8cd98f00b204e9800998ecf8427e"
 #define FILE_1_MD5 "60b725f10c9c85c70d97880dfe8191b3"
 #define FILE_2_MD5 "daa8075d6ac5ff8d0c6d4650adb4ef29"
 #define FILE_3_MD5 "3b41b17bcce0710e7b6f3984c3ce092b"
 
-static void md5_one(const char *fn)
+static char*
+md5_one(const char *fn)
 {
     unsigned char buf[4096], digest[16];
+    //unsigned char result[32 + 1];
+    char* result;
     MD5_CTX md5;
     int l;
     FILE *fp;
 
+    result = malloc(sizeof(char) * (32 + 1));
     fp = strcmp(fn, "-")? fopen(fn, "r") : stdin;
     if (fp == 0) {
         fprintf(stderr, "md5sum: %s: No such file or directory\n", fn);
@@ -46,14 +53,64 @@ static void md5_one(const char *fn)
     MD5Final(digest, &md5);
     if (fp != stdin) fclose(fp);
     for (l = 0; l < 16; ++l)
-        printf("%c%c", HEX_STR[digest[l]>>4&0xf], HEX_STR[digest[l]&0xf]);
-    printf("  %s\n", fn);
+        sprintf(&result[l*2], "%c%c", HEX_STR[digest[l]>>4&0xf], HEX_STR[digest[l]&0xf]);
+    return result;
+}
+
+int main_example(int argc, char *argv[])
+{
+    int i;
+    char* result;
+    if (argc == 1) {
+        md5_one("-");
+    } else {
+        for (i = 1; i < argc; ++i) {
+            result = md5_one(argv[i]);
+            printf("sum= %s\n", result);
+            free(result);
+        }
+    }
+
+    return 0;
 }
 
 int main(int argc, char *argv[])
 {
-    int i;
-    if (argc == 1) md5_one("-");
-    else for (i = 1; i < argc; ++i) md5_one(argv[i]);
+    char* result;
+    int ret;
+    result = md5_one("tests/file0");
+    if (strcmp(result, FILE_0_MD5) != 0) {
+        printf("error on file 0\n");
+        free(result);
+        return 1;
+    }
+    free(result);
+
+    result = md5_one("tests/file1");
+    if (strcmp(result, FILE_1_MD5) != 0) {
+        printf("error on file 1\n");
+        free(result);
+        return 1;
+    }
+    free(result);
+
+    result = md5_one("tests/file2");
+    if (strcmp(result, FILE_2_MD5) != 0) {
+        printf("error on file 2\n");
+        free(result);
+        return 1;
+    } else {
+    }
+    free(result);
+
+    result = md5_one("tests/file3");
+    if (strcmp(result, FILE_3_MD5) != 0) {
+        printf("error on file 3\n");
+        free(result);
+        return 1;
+    }
+    free(result);
+
     return 0;
 }
+
