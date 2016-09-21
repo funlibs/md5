@@ -12,9 +12,13 @@ clean_all:
 
 test: all
 	./build/md5_test tests/file0
+	md5sum tests/file0
 	./build/md5_test tests/file1
+	md5sum tests/file1
 	./build/md5_test tests/file2
+	md5sum tests/file2
 	./build/md5_test tests/file3
+	md5sum tests/file3
 
 %:
 	make -C build $@

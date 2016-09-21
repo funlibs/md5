@@ -34,10 +34,10 @@ void byteReverse(buf, longs)
 {
     uint32_t t;
     do {
-	t = (uint32_t) ((unsigned) buf[3] << 8 | buf[2]) << 16 |
-	    ((unsigned) buf[1] << 8 | buf[0]);
-	*(uint32_t *) buf = t;
-	buf += 4;
+        t = (uint32_t) ((unsigned) buf[3] << 8 | buf[2]) << 16 |
+            ((unsigned) buf[1] << 8 | buf[0]);
+        *(uint32_t *) buf = t;
+        buf += 4;
     } while (--longs);
 }
 #endif
@@ -74,7 +74,7 @@ void MD5Update(ctx, buf, len)
 
     t = ctx->bits[0];
     if ((ctx->bits[0] = t + ((uint32_t) len << 3)) < t)
-	ctx->bits[1]++; 	/* Carry from low to high */
+        ctx->bits[1]++; 	/* Carry from low to high */
     ctx->bits[1] += len >> 29;
 
     t = (t >> 3) & 0x3f;	/* Bytes already in shsInfo->data */
@@ -82,27 +82,27 @@ void MD5Update(ctx, buf, len)
     /* Handle any leading odd-sized chunks */
 
     if (t) {
-	unsigned char *p = (unsigned char *) ctx->in + t;
+        unsigned char *p = (unsigned char *) ctx->in + t;
 
-	t = 64 - t;
-	if (len < t) {
-	    memcpy(p, buf, len);
-	    return;
-	}
-	memcpy(p, buf, t);
-	byteReverse(ctx->in, 16);
-	MD5Transform(ctx->buf, (uint32_t *) ctx->in);
-	buf += t;
-	len -= t;
+        t = 64 - t;
+        if (len < t) {
+            memcpy(p, buf, len);
+            return;
+        }
+        memcpy(p, buf, t);
+        byteReverse(ctx->in, 16);
+        MD5Transform(ctx->buf, (uint32_t *) ctx->in);
+        buf += t;
+        len -= t;
     }
     /* Process data in 64-byte chunks */
 
     while (len >= 64) {
-	memcpy(ctx->in, buf, 64);
-	byteReverse(ctx->in, 16);
-	MD5Transform(ctx->buf, (uint32_t *) ctx->in);
-	buf += 64;
-	len -= 64;
+        memcpy(ctx->in, buf, 64);
+        byteReverse(ctx->in, 16);
+        MD5Transform(ctx->buf, (uint32_t *) ctx->in);
+        buf += 64;
+        len -= 64;
     }
 
     /* Handle any remaining bytes of data. */
@@ -133,16 +133,16 @@ void MD5Final(digest, ctx)
 
     /* Pad out to 56 mod 64 */
     if (count < 8) {
-	/* Two lots of padding:  Pad the first block to 64 bytes */
-	memset(p, 0, count);
-	byteReverse(ctx->in, 16);
-	MD5Transform(ctx->buf, (uint32_t *) ctx->in);
+        /* Two lots of padding:  Pad the first block to 64 bytes */
+        memset(p, 0, count);
+        byteReverse(ctx->in, 16);
+        MD5Transform(ctx->buf, (uint32_t *) ctx->in);
 
-	/* Now fill the next block with 56 bytes */
-	memset(ctx->in, 0, 56);
+        /* Now fill the next block with 56 bytes */
+        memset(ctx->in, 0, 56);
     } else {
-	/* Pad block to 56 bytes */
-	memset(p, 0, count - 8);
+        /* Pad block to 56 bytes */
+        memset(p, 0, count - 8);
     }
     byteReverse(ctx->in, 14);
 
@@ -167,7 +167,7 @@ void MD5Final(digest, ctx)
 
 /* This is the central step in the MD5 algorithm. */
 #define MD5STEP(f, w, x, y, z, data, s) \
-	( w += f(x, y, z) + data,  w = w<<s | w>>(32-s),  w += x )
+    ( w += f(x, y, z) + data,  w = w<<s | w>>(32-s),  w += x )
 
 /*
  * The core of the MD5 algorithm, this alters an existing MD5 hash to
@@ -267,30 +267,30 @@ void MD5Transform(buf, in)
 
 static void md5_one(const char *fn)
 {
-	unsigned char buf[4096], digest[16];
-	MD5_CTX md5;
-	int l;
-	FILE *fp;
+    unsigned char buf[4096], digest[16];
+    MD5_CTX md5;
+    int l;
+    FILE *fp;
 
-	fp = strcmp(fn, "-")? fopen(fn, "r") : stdin;
-	if (fp == 0) {
-		fprintf(stderr, "md5sum: %s: No such file or directory\n", fn);
-		exit(1);
-	}
-	MD5Init(&md5);
-	while ((l = fread(buf, 1, 4096, fp)) > 0)
-		MD5Update(&md5, buf, l);
-	MD5Final(digest, &md5);
-	if (fp != stdin) fclose(fp);
-	for (l = 0; l < 16; ++l)
-		printf("%c%c", HEX_STR[digest[l]>>4&0xf], HEX_STR[digest[l]&0xf]);
-	printf("  %s\n", fn);
+    fp = strcmp(fn, "-")? fopen(fn, "r") : stdin;
+    if (fp == 0) {
+        fprintf(stderr, "md5sum: %s: No such file or directory\n", fn);
+        exit(1);
+    }
+    MD5Init(&md5);
+    while ((l = fread(buf, 1, 4096, fp)) > 0)
+        MD5Update(&md5, buf, l);
+    MD5Final(digest, &md5);
+    if (fp != stdin) fclose(fp);
+    for (l = 0; l < 16; ++l)
+        printf("%c%c", HEX_STR[digest[l]>>4&0xf], HEX_STR[digest[l]&0xf]);
+    printf("  %s\n", fn);
 }
 
 int main(int argc, char *argv[])
 {
-	int i;
-	if (argc == 1) md5_one("-");
-	else for (i = 1; i < argc; ++i) md5_one(argv[i]);
-	return 0;
+    int i;
+    if (argc == 1) md5_one("-");
+    else for (i = 1; i < argc; ++i) md5_one(argv[i]);
+    return 0;
 }

@@ -1,13 +1,13 @@
 /*
-  This file is adapted from a program in this page:
+   This file is adapted from a program in this page:
 
-  http://www.fourmilab.ch/md5/
+http://www.fourmilab.ch/md5/
 
-  The original source code does not work on 64-bit machines due to the
-  wrong typedef "uint32". I also added prototypes.
+The original source code does not work on 64-bit machines due to the
+wrong typedef "uint32". I also added prototypes.
 
-  -lh3
- */
+-lh3
+*/
 
 #ifndef MD5_H
 #define MD5_H
@@ -36,9 +36,9 @@
 #include <stdint.h>
 
 struct MD5Context {
-        uint32_t buf[4];
-        uint32_t bits[2];
-        unsigned char in[64];
+    uint32_t buf[4];
+    uint32_t bits[2];
+    unsigned char in[64];
 };
 
 void MD5Init(struct MD5Context *ctx);
