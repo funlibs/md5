@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# easy makefile
+echo '
+.PHONY: all clean_all
+
+all:
+	make -C build all
+
+clean_all:
+	rm -rf build; rm Makefile
+
+test: all
+	./build/md5_test tests/file0
+	./build/md5_test tests/file1
+	./build/md5_test tests/file2
+	./build/md5_test tests/file3
+
+%:
+	make -C build $@
+' > Makefile
+
+# cleanup build dir if exist
+rm -rf build
+
+# create Unix Makefiles project
+mkdir build && cd build && cmake ..
+
+echo "\nYou can now run \"make && make test\"\n"
+
