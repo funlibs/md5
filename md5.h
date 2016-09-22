@@ -35,6 +35,10 @@ wrong typedef "uint32". I also added prototypes.
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C {
+#endif
+
 struct MD5Context {
     uint32_t buf[4];
     uint32_t bits[2];
@@ -53,6 +57,10 @@ typedef struct MD5Context MD5_CTX;
 /*  Define CHECK_HARDWARE_PROPERTIES to have main,c verify
     byte order and uint32_t settings.  */
 #define CHECK_HARDWARE_PROPERTIES
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* !MD5_H */
 
