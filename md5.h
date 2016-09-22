@@ -36,7 +36,7 @@ wrong typedef "uint32". I also added prototypes.
 #include <stdint.h>
 
 #ifdef __cplusplus
-extern "C {
+extern "C" {
 #endif
 
 struct MD5Context {
